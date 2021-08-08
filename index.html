@@ -9,35 +9,37 @@
     <script src='script.js'></script>
 </head>
 
-<body>
+<body class='dark-mode-body'>
     <div class='score-row'>
         <div class='score-cell'>
-            <p>
+            <p class='dark-mode-text'>
                 Your Score:
             </p>
-            <p id='score'>000000</p>
+            <p class='dark-mode-text' id='score'>000000</p>
         </div>
         <div class='score-cell'>
-            <p>
+            <p class='dark-mode-text'>
                 State:
             </p>
-            <p id='state'>PAUSED</p>
+            <p class='dark-mode-text' id='state'>PAUSED</p>
         </div>
         <div class='score-cell'>
-            <p>
+            <p class='dark-mode-text'>
                 High Score:
             </p>
-            <p id='hScore'>000000</p>
+            <p class='dark-mode-text' id='hScore'>000000</p>
         </div>
     </div>
     <canvas height='440' id='main' width='440'>
         Your browser does not support this website
     </canvas>
-    <p class='prompt'>
+    <p class='prompt dark-mode-text'>
         Press 'space' to pause / resume / restart
     </p>
     <div class='theme-row'>
-        <p>Dark Theme</p>
+        <p class='dark-mode-text'>
+            Dark Theme
+        </p>
         <label class='switch'>
             <input id='switch' onclick='toggleDarkTheme()' type='checkbox'>
             <span class='slider round'></span>

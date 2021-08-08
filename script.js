@@ -14,7 +14,7 @@ const sqrDim = 35;
 
 // game state
 const EMPTY = -1;
-const SNAKE = 1; 
+const SNAKE = 1;
 const ORB = 2;
 
 let orb;
@@ -242,18 +242,10 @@ window.onload = () => {
         window.localStorage.setItem('darkTheme', 'true');
         darkTheme = true;
     }
-    else 
+    else
         darkTheme = (darkTheme === 'true');
 
-    if (darkTheme === true) {
-        let body = document.body;
-        body.classList.toggle('dark-mode-body');
-
-        let paras = document.getElementsByTagName('p');
-        Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
-
-        document.getElementById('switch').checked = true;
-    }
+    document.getElementById('switch').checked = darkTheme;
 
     // get doc vars
     canvas = document.getElementById('main');
