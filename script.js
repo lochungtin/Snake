@@ -236,6 +236,7 @@ document.addEventListener('keydown', event => {
 });
 
 window.onload = () => {
+    window.localStorage.clear();
     // set theme
     darkTheme = window.localStorage.getItem('darkTheme');
     if (darkTheme === null) {
