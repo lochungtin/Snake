@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        S N A K E
+    </title>
+    <link rel='stylesheet' href='style.css' />
+    <script src='script.js'></script>
+</head>
+
+<body>
+    <div class='score-row'>
+        <div class='score-cell'>
+            <p>
+                Your Score:
+            </p>
+            <p id='score'>000000</p>
+        </div>
+        <div class='score-cell'>
+            <p>
+                State:
+            </p>
+            <p id='state'>PAUSED</p>
+        </div>
+        <div class='score-cell'>
+            <p>
+                High Score:
+            </p>
+            <p id='hScore'>000000</p>
+        </div>
+    </div>
+    <canvas height='440' id='main' width='440'>
+        Your browser does not support this website
+    </canvas>
+    <p class='prompt'>
+        Press 'space' to pause / resume / restart
+    </p>
+    <div class='theme-row'>
+        <p>Dark Theme</p>
+        <label class='switch'>
+            <input id='switch' onclick='toggleDarkTheme()' type='checkbox'>
+            <span class='slider round'></span>
+        </label>
+    </div>
+</body>
+
+</html>
