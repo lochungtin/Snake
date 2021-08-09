@@ -123,7 +123,7 @@ const nextFrame = () => {
     else {
         state[snake[0][0]][snake[0][1]] = EMPTY;
         snake.splice(0, 1);
-    }    
+    }
 
     drawGrid();
 
@@ -180,7 +180,6 @@ const toggleDarkTheme = () => {
     window.localStorage.setItem('darkTheme', darkTheme.toString())
 
     let body = document.body;
-    console.log(body.classList);
     body.classList.toggle('dark-mode-body');
 
     let paras = document.getElementsByTagName('p');
@@ -242,18 +241,8 @@ document.addEventListener('keydown', event => {
     }
 });
 
+
 window.onload = () => {
-    // set theme
-    darkTheme = window.localStorage.getItem('darkTheme');
-    if (darkTheme === null) {
-        window.localStorage.setItem('darkTheme', 'true');
-        darkTheme = true;
-    }
-    else
-        darkTheme = (darkTheme === 'true');
-
-    document.getElementById('switch').checked = darkTheme;
-
     // get doc vars
     canvas = document.getElementById('main');
     ctx = canvas.getContext('2d');
@@ -265,10 +254,30 @@ window.onload = () => {
     spawnOrb();
     state[orb[0]][orb[1]] = ORB;
 
-    drawGrid();
+    // set theme
+    darkTheme = window.localStorage.getItem('darkTheme');
+    if (darkTheme === null) {
+        window.localStorage.setItem('darkTheme', 'true');
+        darkTheme = true;
+    }
+    else
+        darkTheme = (darkTheme === 'true');
 
-    // load 
+    document.getElementById('switch').checked = darkTheme;
+
+    if (!darkTheme) {
+        let body = document.body;
+        body.classList.toggle('dark-mode-body');
+
+        let paras = document.getElementsByTagName('p');
+        Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
+    }
+
+    // load score
     let hScore = window.localStorage.getItem('hScore');
     if (hScore !== null)
         document.getElementById('hScore').innerHTML = ('00000' + (hScore)).slice(-6);
+
+    // update
+    drawGrid();
 }
