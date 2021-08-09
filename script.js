@@ -21,6 +21,7 @@ let orb;
 
 let snake;
 let snakeDir;
+let prevDir;
 
 let state;
 
@@ -46,6 +47,29 @@ const getEmpty = () => {
     });
 
     return emptyList;
+}
+
+const init = () => {
+    snakeDir = 'u';
+    prevDir = 'u';
+
+    score = 0;
+
+    state = [
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    ];
+
+    snake = [[5, 7], [5, 6]];
 }
 
 const spawnOrb = () => {
@@ -99,9 +123,13 @@ const nextFrame = () => {
     else {
         state[snake[0][0]][snake[0][1]] = EMPTY;
         snake.splice(0, 1);
-    }
+    }    
 
     drawGrid();
+
+    // update directions
+    console.log(prevDir, snakeDir);
+    prevDir = snakeDir;
     return true;
 }
 
@@ -163,27 +191,6 @@ const toggleDarkTheme = () => {
     drawGrid();
 }
 
-const init = () => {
-    snakeDir = 'u';
-    score = 0;
-
-    state = [
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-    ];
-
-    snake = [[5, 7], [5, 6]];
-}
-
 document.addEventListener('keydown', event => {
     if (event.key === ' ') {
         if (document.getElementById('state').innerHTML === 'GAMEOVER') {
@@ -207,25 +214,25 @@ document.addEventListener('keydown', event => {
         switch (event.key) {
             case 'ArrowUp':
             case 'w':
-                if (snakeDir === 'd')
+                if (prevDir === 'd')
                     return;
                 return snakeDir = 'u';
 
             case 'ArrowDown':
             case 's':
-                if (snakeDir === 'u')
+                if (prevDir === 'u')
                     return;
                 return snakeDir = 'd';
 
             case 'ArrowLeft':
             case 'a':
-                if (snakeDir === 'r')
+                if (prevDir === 'r')
                     return;
                 return snakeDir = 'l';
 
             case 'ArrowRight':
             case 'd':
-                if (snakeDir === 'l')
+                if (prevDir === 'l')
                     return;
                 return snakeDir = 'r';
 
