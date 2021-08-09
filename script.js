@@ -1,10 +1,9 @@
-// === vars ===
+// === consts ===
 // colors
-let darkTheme
 const tileColorD = '#303030';
 const tileColorL = '#F0F0F0';
 const snakeColor = '#00FFB2';
-const orbColor = '#ED3459'
+const orbColor = '#ED3459';
 
 // dimensions
 const paddingL = 2.5;
@@ -12,11 +11,16 @@ const gridDim = 11;
 const gapSize = 5;
 const sqrDim = 35;
 
-// game state
+// tile code
 const EMPTY = -1;
 const SNAKE = 1;
 const ORB = 2;
 
+// === vars ===
+// theme
+let darkTheme
+
+// game state
 let orb;
 
 let snake;
@@ -34,21 +38,6 @@ let canvas;
 let ctx;
 
 // === functions ===
-const rand = (upperbound) => Math.floor(Math.random() * upperbound);
-
-const getEmpty = () => {
-    let emptyList = [];
-
-    state.forEach((row, rIndex) => {
-        row.forEach((col, cIndex) => {
-            if (col === EMPTY)
-                emptyList.push([rIndex, cIndex]);
-        });
-    });
-
-    return emptyList;
-}
-
 const init = () => {
     snakeDir = 'u';
     prevDir = 'u';
@@ -73,11 +62,19 @@ const init = () => {
 }
 
 const spawnOrb = () => {
-    let emptyTiles = getEmpty();
+    let emptyList = [];
+
+    state.forEach((row, rIndex) => {
+        row.forEach((col, cIndex) => {
+            if (col === EMPTY)
+                emptyList.push([rIndex, cIndex]);
+        });
+    });
+
     if (emptyTiles.length === 0)
         return false;
 
-    orb = emptyTiles[rand(emptyTiles.length)];
+    orb = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
     return true;
 }
 
@@ -128,7 +125,6 @@ const nextFrame = () => {
     drawGrid();
 
     // update directions
-    console.log(prevDir, snakeDir);
     prevDir = snakeDir;
     return true;
 }
