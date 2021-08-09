@@ -71,10 +71,10 @@ const spawnOrb = () => {
         });
     });
 
-    if (emptyTiles.length === 0)
+    if (emptyList.length === 0)
         return false;
 
-    orb = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
+    orb = emptyList[Math.floor(Math.random() * emptyList.length)];
     return true;
 }
 
