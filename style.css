@@ -55,6 +55,13 @@ body {
   justify-content: space-between;
 }
 
+.state-cell {
+  align-items: center;
+  display: flex;
+  height: 50px;
+  justify-content: center;
+}
+
 .prompt {
   margin-top: 10px;
 }
