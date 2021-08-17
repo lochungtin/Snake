@@ -3,6 +3,7 @@
 const tileColorD = '#303030';
 const tileColorL = '#F0F0F0';
 const snakeColor = '#00FFB2';
+const headColor = '#4d8a77';
 const orbColor = '#ED3459';
 
 // dimensions
@@ -14,7 +15,8 @@ const sqrDim = 35;
 // tile code
 const EMPTY = -1;
 const SNAKE = 1;
-const ORB = 2;
+const HEAD = 2;
+const ORB = 3;
 
 // === vars ===
 // theme
@@ -104,7 +106,7 @@ const nextFrame = () => {
 
     // update head
     snake.push(newHead);
-    snake.forEach(coords => state[coords[0]][coords[1]] = SNAKE);
+    markSnake();
 
     // collides with orb
     if (newHead[0] === orb[0] && newHead[1] === orb[1]) {
@@ -149,11 +151,16 @@ const start = () => {
     }, 300);
 }
 
+const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);
+
 const drawGrid = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let row = 0; row < gridDim; ++row) {
         for (let col = 0; col < gridDim; ++col) {
             ctx.fillStyle = darkTheme ? tileColorD : tileColorL;
+
+            if (state[row][col] === HEAD)
+                ctx.fillStyle = headColor;
 
             if (state[row][col] === SNAKE)
                 ctx.fillStyle = snakeColor;
@@ -191,9 +198,8 @@ document.addEventListener('keydown', event => {
         if (document.getElementById('state').innerHTML === 'GAMEOVER') {
             document.getElementById('score').innerHTML = '000000';
 
-            // reset game state
             init();
-            snake.forEach(coords => state[coords[0]][coords[1]] = SNAKE);
+            markSnake();
 
             spawnOrb();
             state[orb[0]][orb[1]] = ORB;
@@ -245,7 +251,7 @@ window.onload = () => {
 
     // intialize objects
     init();
-    snake.forEach(coords => state[coords[0]][coords[1]] = SNAKE);
+    markSnake();
 
     spawnOrb();
     state[orb[0]][orb[1]] = ORB;
