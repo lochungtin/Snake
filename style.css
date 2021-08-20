@@ -43,10 +43,34 @@ main {
   background-color: transparent;
   border: none;
   height: 40px;
+  width: 40px;
+}
+
+.menu-btn-pos {
   left: 50px;
   position: absolute;
   top: 50px;
-  width: 40px;
+}
+
+.menu {
+  align-items: center;
+  background-color: #FFFFFFD0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 60px;
+  position: fixed;
+  top: 0;
+  transition: 0.5s; 
+  width: 0;
+  z-index: 1;
+}
+
+.dark-mode-menu-bg {
+  background-color: #1E1E1ED0;
 }
 
 .dark-mode-body {

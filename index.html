@@ -11,9 +11,28 @@
 </head>
 
 <body class='dark-mode-body'>
-    <button class='menu-btn' onclick='openMenu()'>
-        <img alt='menu' id='menuImg' src='./img/menu_dark.svg' width='40' />
+    <button class='menu-btn menu-btn-pos' onclick='openMenu()'>
+        <img alt='menuImg' id='menuImg' src='./img/menu_dark.svg' width='40' />
     </button>
+
+    <div class='menu dark-mode-menu-bg' id='menu'>
+        <button class='menu-btn' onclick='closeMenu()'>
+            <img alt='closeImg' id='closeImg' src='./img/close_dark.svg' width='40' />
+        </button>
+
+        
+
+
+        <div class='theme-row'>
+            <p class='dark-mode-text'>
+                Dark Theme
+            </p>
+            <label class='switch'>
+                <input id='switch' onclick='toggleDarkTheme()' type='checkbox'>
+                <span class='slider round'></span>
+            </label>
+        </div>
+    </div>
 
     <main>
         <div class='score-row'>
@@ -39,15 +58,6 @@
         <p class='prompt dark-mode-text'>
             Press 'space' to pause / resume / restart
         </p>
-        <div class='theme-row'>
-            <p class='dark-mode-text'>
-                Dark Theme
-            </p>
-            <label class='switch'>
-                <input id='switch' onclick='toggleDarkTheme()' type='checkbox'>
-                <span class='slider round'></span>
-            </label>
-        </div>
     </main>
 </body>
 

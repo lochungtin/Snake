@@ -45,6 +45,42 @@ let canvas;
 let ctx;
 
 // ===== functions =====
+// layout and theme
+const openMenu = () => document.getElementById('menu').style.width = '100%';
+
+const closeMenu = () => document.getElementById('menu').style.width = '0%';
+
+const toggleDarkTheme = () => {
+    darkTheme = !darkTheme;
+    window.localStorage.setItem('darkTheme', darkTheme.toString());
+
+    // background color
+    let body = document.body;
+    body.classList.toggle('dark-mode-body');
+
+    let menu = document.getElementById('menu');
+    menu.classList.toggle('dark-mode-menu-bg');
+
+    // text
+    let paras = document.getElementsByTagName('p');
+    Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
+
+    // menu img
+    let menuImg = document.getElementById('menuImg');
+    menuImg.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
+
+    // close img
+    let closeImg = document.getElementById('closeImg');
+    closeImg.src = darkTheme ? './img/close_dark.svg' : './img/close_light.svg';
+
+    // update swtich
+    document.getElementById('switch').checked = darkTheme;
+
+    updateCanvas(false);
+}
+
+
+// game functions & script
 const init = () => {
     snakeDir = 0;
     prevDir = 0;
@@ -228,28 +264,6 @@ const updateCanvas = (newOrb) => {
     }
 }
 
-const toggleDarkTheme = () => {
-    darkTheme = !darkTheme;
-    window.localStorage.setItem('darkTheme', darkTheme.toString())
-
-    // background color
-    let body = document.body;
-    body.classList.toggle('dark-mode-body');
-
-    // text
-    let paras = document.getElementsByTagName('p');
-    Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
-
-    // menu img
-    let menu = document.getElementById('menuImg');
-    menu.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
-
-    // update swtich
-    document.getElementById('switch').checked = darkTheme;
-
-    updateCanvas(false);
-}
-
 document.addEventListener('keydown', event => {
     if (event.key === ' ') {
         if (document.getElementById('state').innerHTML === 'GAMEOVER') {
@@ -324,11 +338,24 @@ window.onload = () => {
     document.getElementById('switch').checked = darkTheme;
 
     if (!darkTheme) {
+        // background color
         let body = document.body;
         body.classList.toggle('dark-mode-body');
 
+        let menu = document.getElementById('menu');
+        menu.classList.toggle('dark-mode-menu-bg');
+
+        // text
         let paras = document.getElementsByTagName('p');
         Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
+
+        // menu img
+        let menuImg = document.getElementById('menuImg');
+        menuImg.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
+
+        // close img
+        let closeImg = document.getElementById('closeImg');
+        closeImg.src = darkTheme ? './img/close_dark.svg' : './img/close_light.svg';
     }
 
     // load score
