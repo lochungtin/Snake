@@ -24,6 +24,3 @@ Create an OpenCV powered reinenforcement learning bot to play a game of snake
 |               Light Mode 11 x 11 Grid               |                     Setting Menu                      |
 | :-------------------------------------------------: | :---------------------------------------------------: |
 | <img src='./img/screenshots/l11.png' width='400' /> | <img src='./img/screenshots/lMenu.png' width='400' /> |
-
-## Next Steps
-1. Add difficulty and score multiplier
