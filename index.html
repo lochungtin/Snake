@@ -11,12 +11,12 @@
 </head>
 
 <body class='dark-mode-body'>
-    <button class='menu-btn menu-btn-pos' onclick='openMenu()'>
+    <button class='menu-btn menu-btn-pos' onclick='toggleMenu(true)'>
         <img alt='menuImg' id='menuImg' src='./img/menu_dark.svg' width='40' />
     </button>
 
     <div class='menu dark-mode-menu-bg' id='menu'>
-        <button class='menu-btn' onclick='closeMenu()'>
+        <button class='menu-btn' onclick='toggleMenu(false)'>
             <img alt='closeImg' id='closeImg' src='./img/close_dark.svg' width='40' />
         </button>
 

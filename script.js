@@ -31,8 +31,9 @@ const ORB = 3;
 let SPEEDS = [500, 300, 100, 25];
 
 // ===== vars =====
-// theme
+// theme and layout
 let darkTheme
+let menuOpen = false;
 
 // game state
 let orb;
@@ -52,9 +53,10 @@ let ctx;
 
 // ===== functions =====
 // layout and theme
-const openMenu = () => document.getElementById('menu').style.width = '100%';
-
-const closeMenu = () => document.getElementById('menu').style.width = '0%';
+const toggleMenu = open => {
+    menuOpen = open;
+    document.getElementById('menu').style.width = menuOpen ? '100%' : '0%';
+}
 
 const toggleDarkTheme = () => {
     darkTheme = !darkTheme;
@@ -86,7 +88,7 @@ const toggleDarkTheme = () => {
 }
 
 // set difficulty
-const selectDifficulty = (index) => {
+const selectDifficulty = index => {
     let elems = [
         document.getElementById('easyDiffBtn'),
         document.getElementById('normDiffBtn'),
@@ -231,7 +233,7 @@ const drawCircle = (x, y, radius, ctx, color) => {
     ctx.fill()
 }
 
-const updateCanvas = (newOrb) => {
+const updateCanvas = newOrb => {
     // clear
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -287,6 +289,14 @@ const updateCanvas = (newOrb) => {
 }
 
 document.addEventListener('keydown', event => {
+    // ignore if sidebar open
+    if (menuOpen) {
+        if (event.key === 'Escape')
+            toggleMenu(false);   
+        return
+    }
+
+    // space bar
     if (event.key === ' ') {
         if (document.getElementById('state').innerHTML === 'GAMEOVER') {
             document.getElementById('score').innerHTML = '000000';
