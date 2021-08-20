@@ -41,10 +41,6 @@ main {
   justify-content: center;
 }
 
-.dark-mode-text {
-	color: #FFFFFF;
-}
-
 .menu-btn {
   height: 40px;
   width: 40px;
@@ -73,12 +69,8 @@ main {
   z-index: 1;
 }
 
-.dark-mode-menu-bg {
-  background-color: #1E1E1ED0;
-}
-
-.dark-mode-body {
-	background-color: #1E1E1E;
+.close-btn-container {
+  width: 400px;
 }
 
 .menu-label-container {
@@ -89,12 +81,12 @@ main {
   font-size: 25px;
 }
 
-.difficulty-selection-container {
+.selection-root-container {
   margin-bottom: 20px;
   margin-top: 10px;
 }
 
-.difficulty-mode-container {
+.selection-container {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -126,6 +118,7 @@ main {
 
 .slider {
   background-color: #CCCCCC;
+  border-radius: 34px;
   bottom: 0;
   cursor: pointer;
   left: 0;
@@ -137,6 +130,7 @@ main {
 }
 
 .slider:before {
+  border-radius: 50%;
   bottom: 4px;
   content: "";
   height: 26px;
@@ -160,15 +154,6 @@ input:checked + .slider:before {
   transform: translateX(26px);
   -ms-transform: translateX(26px);
   -webkit-transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
 }
 
 .score-row {
@@ -197,4 +182,16 @@ input:checked + .slider:before {
 
 .prompt {
   margin-top: 10px;
+}
+
+.dark-mode-body {
+  background-color: #1E1E1E;
+}
+
+.dark-mode-menu-bg {
+  background-color: #1E1E1ED0;
+}
+
+.dark-mode-text {
+  color: #FFFFFF;
 }
