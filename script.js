@@ -174,7 +174,15 @@ const setHScore = score => {
     // save hscore to table
     window.localStorage.setItem('hScoreTable', JSON.stringify(hScoreTable));
 
+    // find all time high in all modes
+    max = 0;
+    hScoreTable.forEach(speed => speed.forEach(score => {
+        if (score > max)
+            max = score;
+    }));
     
+    // save highest score
+    window.localStorage.setItem('hScore', max.toString());
 }
 
 // === game functions ===
