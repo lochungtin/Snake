@@ -8,7 +8,6 @@ const COLOR_LIGHT_RED = '#ED3459';
 const COLOR_DARK_RED = '#BD2040';
 const COLOR_POS_CIRCLE = '#F0F0F0';
 
-
 // canvas dimensions
 const PADDING_LEFT = 2.5;
 const PADDING_TOP = 30;
@@ -27,6 +26,7 @@ const ORB = 3;
 
 // game settings
 let SPEEDS = [500, 300, 100, 25];
+
 
 // ===== vars =====
 // theme and layout
@@ -54,6 +54,7 @@ let hScoreTable;
 let canvas;
 let ctx;
 
+
 // ===== functions =====
 // menu toggle
 const toggleMenu = open => {
@@ -61,7 +62,6 @@ const toggleMenu = open => {
     document.getElementById('menu').style.width = menuOpen ? '100%' : '0%';
 }
 
-// === config setting ===
 // set grid dim
 const setGridDim = (dim, bypass) => {
     // update global var
@@ -180,7 +180,7 @@ const setHScore = score => {
         if (score > max)
             max = score;
     }));
-    
+
     // save highest score
     window.localStorage.setItem('hScore', max.toString());
 }
