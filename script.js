@@ -71,7 +71,7 @@ const setGridDim = dim => {
         document.getElementById('x9Btn'),
         document.getElementById('x7Btn'),
     ]
-        .forEach((elem, index) => elem.src = index === 2 - (dim - 7) / 2 ? './img/checked_true.svg' : './img/checked_false.svg');
+        .forEach((elem, index) => elem.src = index === 2 - (dim - 7) / 2 ? './icons/checked_true.svg' : './icons/checked_false.svg');
 
     // redraw canvas
     init();
@@ -92,7 +92,7 @@ const setDifficulty = index => {
         document.getElementById('hardDiffBtn'),
         document.getElementById('aiDiffBtn'),
     ]
-        .forEach((elem, index) => elem.src = index === speedSelection ? './img/checked_true.svg' : './img/checked_false.svg');
+        .forEach((elem, index) => elem.src = index === speedSelection ? './icons/checked_true.svg' : './icons/checked_false.svg');
 
     // save diff selection
     window.localStorage.setItem('diff', index.toString());
@@ -123,8 +123,8 @@ const setDarkTheme = on => {
     }
 
     // update images
-    menuImg.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
-    closeImg.src = darkTheme ? './img/close_dark.svg' : './img/close_light.svg';
+    menuImg.src = darkTheme ? './icons/menu_dark.svg' : './icons/menu_light.svg';
+    closeImg.src = darkTheme ? './icons/close_dark.svg' : './icons/close_light.svg';
 
     // update swtich
     document.getElementById('switch').checked = darkTheme;
