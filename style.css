@@ -46,8 +46,6 @@ main {
 }
 
 .menu-btn {
-  background-color: transparent;
-  border: none;
   height: 40px;
   width: 40px;
 }
@@ -83,16 +81,24 @@ main {
 	background-color: #1E1E1E;
 }
 
+.menu-label-container {
+  margin-top: 20px;
+}
+
+.menu-label {
+  font-size: 25px;
+}
+
 .difficulty-selection-container {
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .difficulty-mode-container {
   align-items: center;
   display: flex;
   flex-direction: row;
-  height: 50px;
+  height: 40px;
   justify-content: space-between;
   width: 300px;
 }

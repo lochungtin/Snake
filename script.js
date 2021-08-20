@@ -27,6 +27,9 @@ const SNAKE = 1;
 const HEAD = 2;
 const ORB = 3;
 
+// game settings
+let SPEEDS = [500, 300, 100, 25];
+
 // ===== vars =====
 // theme
 let darkTheme
@@ -41,17 +44,7 @@ let score;
 let pause = true;
 
 // game setting
-let easy = 500;
-let normal = 300;
-let hard = 100;
-let ai = 25;
-let difficulty = {
-    easy,
-    normal,
-    hard,
-    ai,
-}
-let speedSelection = Object.keys(difficulty)[2];
+let speedSelection = 1;
 
 // doc vars
 let canvas;
@@ -92,6 +85,22 @@ const toggleDarkTheme = () => {
     updateCanvas(false);
 }
 
+// set difficulty
+const selectDifficulty = (index) => {
+    let elems = [
+        document.getElementById('easyDiffBtn'),
+        document.getElementById('normDiffBtn'),
+        document.getElementById('hardDiffBtn'),
+        document.getElementById('aiDiffBtn'),
+    ];
+
+    // update buttons
+    speedSelection = index;
+    elems.forEach((elem, index )=> elem.src = index === speedSelection ? './img/checked_true.svg' : './img/checked_false.svg');
+
+    // save diff selection
+    window.localStorage.setItem('diff', index.toString());
+}
 
 // game functions & script
 const init = () => {
@@ -210,7 +219,7 @@ const start = () => {
                 }
             }
         }
-    }, difficulty[speedSelection]);
+    }, SPEEDS[speedSelection]);
 }
 
 const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);
@@ -370,6 +379,15 @@ window.onload = () => {
         let closeImg = document.getElementById('closeImg');
         closeImg.src = darkTheme ? './img/close_dark.svg' : './img/close_light.svg';
     }
+
+    // set speed
+    let speed = window.localStorage.getItem('diff');
+    if (speed === null) {
+        window.localStorage.setItem('diff', '1');
+        speed = '1';
+    }
+    
+    selectDifficulty(parseInt(speed));
 
     // load score
     let hScore = window.localStorage.getItem('hScore');
