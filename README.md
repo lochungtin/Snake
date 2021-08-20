@@ -5,9 +5,30 @@
 
 Simple game of snake coded in static html, js, and css
 
+## Basics
+
+- Press space to start, pause, and restart.
+- Use the arrow keys and / or W A S D, to control directions.
+
 ## Intended use
 
-Create an OpenCV powered reinenforcement learning bot to play a game of snake
+Used for a Neural Expected Sarsa Reinforcement Learning Agent to train. But it is also coded so that the game itself is playable by humans as well.
+
+More information and repo of the training agent can be accessed <a href='https://github.com/lochungtin/snakeAI'>here</a>.
+
+### Dots bar
+
+The line of dots above the main play grid is used for the AI agent to both calibrate the vision system and convey additional state information. 
+
+#### Calibration
+
+The leftmost dot is the calibration dot, all subsequent locations for pixel readings are based on the calibartion dot.
+
+#### State Info
+
+The middle 4 dots indicate the direction of the snake. From left to right, each dot indicated, up, down, left, and right respectively.
+
+The rightmost dot indicates whether if on that exact frame, the snake comes in contact with the orb. If so, the dot will flash a brighter shade of red.
 
 ## Gallery
 
@@ -55,3 +76,6 @@ The value of the score multiplier is 50, with a base score of 50, the multiplied
 - Normal: 100
 - Hard: 150
 - Insane: 200
+
+### High Scores
+For each difficulty and grid size, a separate high score is kept and stored in the browser's local storage
