@@ -51,59 +51,13 @@ let canvas;
 let ctx;
 
 // ===== functions =====
-// layout and theme
+// menu toggle
 const toggleMenu = open => {
     menuOpen = open;
     document.getElementById('menu').style.width = menuOpen ? '100%' : '0%';
 }
 
-const toggleDarkTheme = () => {
-    darkTheme = !darkTheme;
-    window.localStorage.setItem('darkTheme', darkTheme.toString());
-
-    // background color
-    let body = document.body;
-    body.classList.toggle('dark-mode-body');
-
-    let menu = document.getElementById('menu');
-    menu.classList.toggle('dark-mode-menu-bg');
-
-    // text
-    let paras = document.getElementsByTagName('p');
-    Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
-
-    // menu img
-    let menuImg = document.getElementById('menuImg');
-    menuImg.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
-
-    // close img
-    let closeImg = document.getElementById('closeImg');
-    closeImg.src = darkTheme ? './img/close_dark.svg' : './img/close_light.svg';
-
-    // update swtich
-    document.getElementById('switch').checked = darkTheme;
-
-    updateCanvas(false);
-}
-
-// set difficulty
-const setDifficulty = index => {
-    // update global var
-    speedSelection = index;
-
-    // update buttons
-    [
-        document.getElementById('easyDiffBtn'),
-        document.getElementById('normDiffBtn'),
-        document.getElementById('hardDiffBtn'),
-        document.getElementById('aiDiffBtn'),
-    ]
-        .forEach((elem, index )=> elem.src = index === speedSelection ? './img/checked_true.svg' : './img/checked_false.svg');
-
-    // save diff selection
-    window.localStorage.setItem('diff', index.toString());
-}
-
+// === config setting ===
 // set grid dim
 const setGridDim = dim => {
     // update global var
@@ -117,7 +71,7 @@ const setGridDim = dim => {
         document.getElementById('x9Btn'),
         document.getElementById('x7Btn'),
     ]
-        .forEach((elem, index )=> elem.src = index === 2 - (dim - 7) / 2 ? './img/checked_true.svg' : './img/checked_false.svg');
+        .forEach((elem, index) => elem.src = index === 2 - (dim - 7) / 2 ? './img/checked_true.svg' : './img/checked_false.svg');
 
     // redraw canvas
     init();
@@ -126,15 +80,73 @@ const setGridDim = dim => {
     // save grid dim
     window.localStorage.setItem('dim', dim.toString());
 }
+// set difficulty
+const setDifficulty = index => {
+    // update global var
+    speedSelection = index;
 
-// game functions & script
+    // update buttons
+    [
+        document.getElementById('easyDiffBtn'),
+        document.getElementById('normDiffBtn'),
+        document.getElementById('hardDiffBtn'),
+        document.getElementById('aiDiffBtn'),
+    ]
+        .forEach((elem, index) => elem.src = index === speedSelection ? './img/checked_true.svg' : './img/checked_false.svg');
+
+    // save diff selection
+    window.localStorage.setItem('diff', index.toString());
+}
+
+// set dark theme
+const setDarkTheme = on => {
+    // update global var
+    darkTheme = on;
+
+    // get all elems
+    let body = document.body;
+    let menu = document.getElementById('menu');
+    let paras = document.getElementsByTagName('p');
+    let menuImg = document.getElementById('menuImg');
+    let closeImg = document.getElementById('closeImg');
+
+    // update elements
+    if (darkTheme) {
+        body.classList.add('dark-mode-body');
+        menu.classList.add('dark-mode-menu-bg');
+        Array.from(paras).forEach(para => para.classList.add('dark-mode-text'));
+    }
+    else {
+        body.classList.remove('dark-mode-body');
+        menu.classList.remove('dark-mode-menu-bg');
+        Array.from(paras).forEach(para => para.classList.remove('dark-mode-text'));
+    }
+
+    // update images
+    menuImg.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
+    closeImg.src = darkTheme ? './img/close_dark.svg' : './img/close_light.svg';
+
+    // update swtich
+    document.getElementById('switch').checked = darkTheme;
+
+    // redraw canvas
+    updateCanvas(false);
+
+    // save theme selection
+    window.localStorage.setItem('darkTheme', darkTheme.toString());
+}
+
+// === game functions ===
 const init = () => {
+    // reset directions
     snakeDir = 0;
     prevDir = 0;
 
+    // reset score
     score = 0;
     document.getElementById('score').innerHTML = '000000';
 
+    // build state
     state = [];
     for (let i = 0; i < gridDim; ++i) {
         let row = new Array(gridDim);
@@ -143,18 +155,21 @@ const init = () => {
         state.push(row);
     }
 
+    // set snake head to center
     snake = [
         [
             Math.floor(gridDim / 2),
             Math.floor(gridDim / 2),
         ],
     ];
-
     markSnake();
 
+    // spawn orb
     spawnOrb();
     state[orb[0]][orb[1]] = ORB;
 }
+
+const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);
 
 const spawnOrb = () => {
     let emptyList = [];
@@ -170,6 +185,26 @@ const spawnOrb = () => {
     orb = emptyList[Math.floor(Math.random() * emptyList.length)];
 
     return true;
+}
+
+const start = () => {
+    let id = setTimeout(() => {
+        if (!pause) {
+            if (nextFrame())
+                start();
+            else {
+                clearTimeout(id);
+                document.getElementById('state').innerHTML = 'GAMEOVER';
+
+                // set highscore
+                let hScore = window.localStorage.getItem('hScore');
+                if (hScore === null || parseInt(hScore) < score) {
+                    window.localStorage.setItem('hScore', score);
+                    document.getElementById('hScore').innerHTML = ('00000' + (score)).slice(-6);
+                }
+            }
+        }
+    }, SPEEDS[speedSelection]);
 }
 
 const nextFrame = () => {
@@ -227,35 +262,7 @@ const nextFrame = () => {
     return true;
 }
 
-const start = () => {
-    let id = setTimeout(() => {
-        if (!pause) {
-            if (nextFrame())
-                start();
-            else {
-                clearTimeout(id);
-                document.getElementById('state').innerHTML = 'GAMEOVER';
-
-                // set highscore
-                let hScore = window.localStorage.getItem('hScore');
-                if (hScore === null || parseInt(hScore) < score) {
-                    window.localStorage.setItem('hScore', score);
-                    document.getElementById('hScore').innerHTML = ('00000' + (score)).slice(-6);
-                }
-            }
-        }
-    }, SPEEDS[speedSelection]);
-}
-
-const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);
-
-const drawCircle = (x, y, radius, ctx, color) => {
-    ctx.fillStyle = color
-    ctx.beginPath()
-    ctx.arc(x, y, radius, 0, Math.PI * 2, true)
-    ctx.fill()
-}
-
+// update canvas
 const updateCanvas = newOrb => {
     // clear
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -311,11 +318,19 @@ const updateCanvas = newOrb => {
     }
 }
 
+const drawCircle = (x, y, radius, ctx, color) => {
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, Math.PI * 2, true)
+    ctx.fill()
+}
+
+// key stroke listener
 document.addEventListener('keydown', event => {
     // ignore if sidebar open
     if (menuOpen) {
         if (event.key === 'Escape')
-            toggleMenu(false);   
+            toggleMenu(false);
         return
     }
 
@@ -364,6 +379,7 @@ document.addEventListener('keydown', event => {
     }
 });
 
+// window on load initialization
 window.onload = () => {
     // get doc vars
     canvas = document.getElementById('main');
@@ -375,39 +391,7 @@ window.onload = () => {
         window.localStorage.setItem('dim', '11');
         dim = '11';
     }
-    setGridDim(parseInt(dim));   
-
-    // set theme
-    darkTheme = window.localStorage.getItem('darkTheme');
-    if (darkTheme === null) {
-        window.localStorage.setItem('darkTheme', 'true');
-        darkTheme = true;
-    }
-    else
-        darkTheme = (darkTheme === 'true');
-
-    document.getElementById('switch').checked = darkTheme;
-
-    if (!darkTheme) {
-        // background color
-        let body = document.body;
-        body.classList.toggle('dark-mode-body');
-
-        let menu = document.getElementById('menu');
-        menu.classList.toggle('dark-mode-menu-bg');
-
-        // text
-        let paras = document.getElementsByTagName('p');
-        Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
-
-        // menu img
-        let menuImg = document.getElementById('menuImg');
-        menuImg.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
-
-        // close img
-        let closeImg = document.getElementById('closeImg');
-        closeImg.src = darkTheme ? './img/close_dark.svg' : './img/close_light.svg';
-    }
+    setGridDim(parseInt(dim));
 
     // set speed
     let speed = window.localStorage.getItem('diff');
@@ -416,6 +400,14 @@ window.onload = () => {
         speed = '1';
     }
     setDifficulty(parseInt(speed));
+
+    // set theme
+    theme = window.localStorage.getItem('darkTheme');
+    if (darkTheme === null) {
+        window.localStorage.setItem('darkTheme', 'true');
+        theme = 'true';
+    }
+    setDarkTheme(theme === 'true');
 
     // load score
     let hScore = window.localStorage.getItem('hScore');
