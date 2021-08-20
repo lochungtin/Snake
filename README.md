@@ -3,7 +3,7 @@
 
 # Snake
 
-Simple game of snake coded in static html, js, and css
+Simple game of snake coded in static HTML, JavaScript, and CSS
 
 ## Basics
 
