@@ -75,7 +75,6 @@ const setGridDim = dim => {
 
     // redraw canvas
     init();
-    updateCanvas(false);
 
     // save grid dim
     window.localStorage.setItem('dim', dim.toString());
@@ -136,6 +135,8 @@ const setDarkTheme = on => {
     window.localStorage.setItem('darkTheme', darkTheme.toString());
 }
 
+const toggleDarkTheme = () => setDarkTheme(!darkTheme);
+
 // === game functions ===
 const init = () => {
     // reset directions
@@ -167,6 +168,9 @@ const init = () => {
     // spawn orb
     spawnOrb();
     state[orb[0]][orb[1]] = ORB;
+
+    // redraw canvas
+    updateCanvas(false);
 }
 
 const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);
@@ -295,6 +299,8 @@ const updateCanvas = newOrb => {
     );
 
     // draw grid
+    let indent = 2 - (gridDim - 7) / 2;
+    let filler = (SQR_DIM + GAP_SIZE) * indent;
     for (let row = 0; row < gridDim; ++row) {
         for (let col = 0; col < gridDim; ++col) {
             ctx.fillStyle = darkTheme ? COLOR_TILE_DARK : COLOR_TILE_LIGHT;
@@ -309,8 +315,8 @@ const updateCanvas = newOrb => {
                 ctx.fillStyle = COLOR_LIGHT_RED;
 
             ctx.fillRect(
-                row * (SQR_DIM + GAP_SIZE) + PADDING_LEFT,
-                col * (SQR_DIM + GAP_SIZE) + PADDING_TOP,
+                row * (SQR_DIM + GAP_SIZE) + PADDING_LEFT + filler,
+                col * (SQR_DIM + GAP_SIZE) + PADDING_TOP + filler,
                 SQR_DIM,
                 SQR_DIM
             );
@@ -336,10 +342,8 @@ document.addEventListener('keydown', event => {
 
     // space bar
     if (event.key === ' ') {
-        if (document.getElementById('state').innerHTML === 'GAMEOVER') {
+        if (document.getElementById('state').innerHTML === 'GAMEOVER')
             init();
-            updateCanvas(false);
-        }
 
         document.getElementById('state').innerHTML = pause ? 'PLAYING' : 'PAUSED';
         start();
@@ -414,7 +418,6 @@ window.onload = () => {
     if (hScore !== null)
         document.getElementById('hScore').innerHTML = ('00000' + (hScore)).slice(-6);
 
-    // update
+    // initialize
     init();
-    updateCanvas(false);
 }
