@@ -25,8 +25,11 @@ const HEAD = 2;
 const ORB = 3;
 
 // game settings
-let SPEEDS = [500, 300, 100, 25];
+let SPEEDS = [500, 300, 100, 50];
 
+// score settings
+let BASE_SCORE = 50;
+let SCORE_MULTIPIER = 50;
 
 // ===== vars =====
 // theme and layout
@@ -287,7 +290,7 @@ const nextFrame = () => {
     // collides with orb
     newOrb = false
     if (newHead[0] === orb[0] && newHead[1] === orb[1]) {
-        score += 50;
+        score += BASE_SCORE + (speedSelection * SCORE_MULTIPIER);
         document.getElementById('score').innerHTML = ('00000' + (score)).slice(-6);
         // unable to spawn orb, beate the game
         if (!spawnOrb()) {
