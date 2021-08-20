@@ -26,12 +26,27 @@ p {
 
 html,
 body {
+  height: 100%;
+  width: 100%;
+}
+
+main {
   align-items: center;
   display: flex;
   flex: 1;
   flex-direction: column;
   height: 100%;
   justify-content: center;
+}
+
+.menu-btn {
+  background-color: transparent;
+  border: none;
+  height: 40px;
+  left: 50px;
+  position: absolute;
+  top: 50px;
+  width: 40px;
 }
 
 .dark-mode-body {

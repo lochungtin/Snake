@@ -6,43 +6,49 @@
         S N A K E
     </title>
     <script src='script.js'></script>
-    <link rel="shortcut icon" type="image/x-icon" href="./img/icon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="./img/icon.ico" />
     <link rel='stylesheet' href='style.css' />
 </head>
 
 <body class='dark-mode-body'>
-    <div class='score-row'>
-        <div class='score-cell'>
-            <p class='dark-mode-text'>
-                Your Score:
-            </p>
-            <p class='dark-mode-text' id='score'>000000</p>
+    <button class='menu-btn' onclick='openMenu()'>
+        <img alt='menu' id='menuImg' src='./img/menu_dark.svg' width='40' />
+    </button>
+
+    <main>
+        <div class='score-row'>
+            <div class='score-cell'>
+                <p class='dark-mode-text'>
+                    Your Score:
+                </p>
+                <p class='dark-mode-text' id='score'>000000</p>
+            </div>
+            <div class='state-cell'>
+                <p class='dark-mode-text' id='state'>PAUSED</p>
+            </div>
+            <div class='score-cell'>
+                <p class='dark-mode-text'>
+                    High Score:
+                </p>
+                <p class='dark-mode-text' id='hScore'>000000</p>
+            </div>
         </div>
-        <div class='state-cell'>
-            <p class='dark-mode-text' id='state'>PAUSED</p>
-        </div>
-        <div class='score-cell'>
-            <p class='dark-mode-text'>
-                High Score:
-            </p>
-            <p class='dark-mode-text' id='hScore'>000000</p>
-        </div>
-    </div>
-    <canvas height='470' id='main' width='440'>
-        Your browser does not support this website
-    </canvas>
-    <p class='prompt dark-mode-text'>
-        Press 'space' to pause / resume / restart
-    </p>
-    <div class='theme-row'>
-        <p class='dark-mode-text'>
-            Dark Theme
+        <canvas height='470' id='main' width='440'>
+            Your browser does not support this website
+        </canvas>
+        <p class='prompt dark-mode-text'>
+            Press 'space' to pause / resume / restart
         </p>
-        <label class='switch'>
-            <input id='switch' onclick='toggleDarkTheme()' type='checkbox'>
-            <span class='slider round'></span>
-        </label>
-    </div>
+        <div class='theme-row'>
+            <p class='dark-mode-text'>
+                Dark Theme
+            </p>
+            <label class='switch'>
+                <input id='switch' onclick='toggleDarkTheme()' type='checkbox'>
+                <span class='slider round'></span>
+            </label>
+        </div>
+    </main>
 </body>
 
 </html>

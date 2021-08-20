@@ -13,7 +13,7 @@ const GRID_DIM = 11;
 
 // canvas dimensions
 const PADDING_LEFT = 2.5;
-const PADDING_TOP_GRID = 30;
+const PADDING_TOP = 30;
 
 const CIRCLE_RADIUS = 5;
 const CIRCLE_X = [190, 210, 230, 250];
@@ -65,7 +65,12 @@ const init = () => {
         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ];
 
-    snake = [[5, 7], [5, 6]];
+    snake = [
+        [
+            Math.floor(GRID_DIM / 2),
+            Math.floor(GRID_DIM / 2),
+        ],
+    ];
 }
 
 const spawnOrb = () => {
@@ -98,9 +103,9 @@ const nextFrame = () => {
     if (
         // out of bounds
         newHead[0] < 0 ||
-        newHead[0] > 10 ||
+        newHead[0] > GRID_DIM - 1 ||
         newHead[1] < 0 ||
-        newHead[1] > 10 ||
+        newHead[1] > GRID_DIM - 1 ||
         // own body collision
         snake.findIndex(coords => coords[0] === newHead[0] && coords[1] === newHead[1]) !== -1
     ) {
@@ -125,7 +130,7 @@ const nextFrame = () => {
         // new orb
         else
             newOrb = true
-            state[orb[0]][orb[1]] = ORB;
+        state[orb[0]][orb[1]] = ORB;
     }
     else {
         state[snake[0][0]][snake[0][1]] = EMPTY;
@@ -215,7 +220,7 @@ const updateCanvas = (newOrb) => {
 
             ctx.fillRect(
                 row * (SQR_DIM + GAP_SIZE) + PADDING_LEFT,
-                col * (SQR_DIM + GAP_SIZE) + PADDING_TOP_GRID,
+                col * (SQR_DIM + GAP_SIZE) + PADDING_TOP,
                 SQR_DIM,
                 SQR_DIM
             );
@@ -227,12 +232,19 @@ const toggleDarkTheme = () => {
     darkTheme = !darkTheme;
     window.localStorage.setItem('darkTheme', darkTheme.toString())
 
+    // background color
     let body = document.body;
     body.classList.toggle('dark-mode-body');
 
+    // text
     let paras = document.getElementsByTagName('p');
     Array.from(paras).forEach(para => para.classList.toggle('dark-mode-text'));
 
+    // menu img
+    let menu = document.getElementById('menuImg');
+    menu.src = darkTheme ? './img/menu_dark.svg' : './img/menu_light.svg';
+
+    // update swtich
     document.getElementById('switch').checked = darkTheme;
 
     updateCanvas(false);
