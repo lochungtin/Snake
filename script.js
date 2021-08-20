@@ -46,6 +46,10 @@ let pause = true;
 let speedSelection;
 let gridDim;
 
+// score data (t[speed][dim])
+let hScore;
+let hScoreTable;
+
 // doc vars
 let canvas;
 let ctx;
@@ -59,28 +63,32 @@ const toggleMenu = open => {
 
 // === config setting ===
 // set grid dim
-const setGridDim = dim => {
+const setGridDim = (dim, bypass) => {
     // update global var
     gridDim = dim;
 
-    // update buttons 
-    console.log(dim)
-    console.log(2 - (dim - 7) / 2);
+    // update buttons
     [
         document.getElementById('x11Btn'),
         document.getElementById('x9Btn'),
         document.getElementById('x7Btn'),
     ]
-        .forEach((elem, index) => elem.src = index === 2 - (dim - 7) / 2 ? './icons/checked_true.svg' : './icons/checked_false.svg');
+        .forEach((elem, index) => elem.src = index === 2 - (gridDim - 7) / 2 ? './icons/checked_true.svg' : './icons/checked_false.svg');
 
     // redraw canvas
     init();
 
     // save grid dim
-    window.localStorage.setItem('dim', dim.toString());
+    window.localStorage.setItem('dim', gridDim.toString());
+
+    // highscore bypass
+    if (bypass)
+        return;
+
+    loadHScore(hScoreTable);
 }
 // set difficulty
-const setDifficulty = index => {
+const setDifficulty = (index, bypass) => {
     // update global var
     speedSelection = index;
 
@@ -94,7 +102,13 @@ const setDifficulty = index => {
         .forEach((elem, index) => elem.src = index === speedSelection ? './icons/checked_true.svg' : './icons/checked_false.svg');
 
     // save diff selection
-    window.localStorage.setItem('diff', index.toString());
+    window.localStorage.setItem('diff', speedSelection.toString());
+
+    // highscore bypass
+    if (bypass)
+        return;
+
+    loadHScore(hScoreTable)
 }
 
 // set dark theme
@@ -136,6 +150,32 @@ const setDarkTheme = on => {
 }
 
 const toggleDarkTheme = () => setDarkTheme(!darkTheme);
+
+// load scores
+const loadHScore = table => {
+    // update global var
+    hScoreTable = table;
+
+    // update doc display
+    hScore = hScoreTable[speedSelection][2 - (gridDim - 7) / 2];
+    document.getElementById('hScore').innerHTML = ('00000' + hScore).slice(-6);
+}
+
+const setHScore = score => {
+    // update global var
+    hScore = score
+
+    // update table
+    hScoreTable[speedSelection][2 - (gridDim - 7) / 2] = hScore;
+
+    // update doc display
+    document.getElementById('hScore').innerHTML = ('00000' + (hScore)).slice(-6);
+
+    // save hscore to table
+    window.localStorage.setItem('hScoreTable', JSON.stringify(hScoreTable));
+
+    
+}
 
 // === game functions ===
 const init = () => {
@@ -201,11 +241,8 @@ const start = () => {
                 document.getElementById('state').innerHTML = 'GAMEOVER';
 
                 // set highscore
-                let hScore = window.localStorage.getItem('hScore');
-                if (hScore === null || parseInt(hScore) < score) {
-                    window.localStorage.setItem('hScore', score);
-                    document.getElementById('hScore').innerHTML = ('00000' + (score)).slice(-6);
-                }
+                if (hScore < score)
+                    setHScore(score);
             }
         }
     }, SPEEDS[speedSelection]);
@@ -298,9 +335,10 @@ const updateCanvas = newOrb => {
         newOrb ? COLOR_LIGHT_RED : COLOR_DARK_RED,
     );
 
-    // draw grid
+    // compensation for smaller grid sizes
     let indent = 2 - (gridDim - 7) / 2;
     let filler = (SQR_DIM + GAP_SIZE) * indent;
+    // draw grid
     for (let row = 0; row < gridDim; ++row) {
         for (let col = 0; col < gridDim; ++col) {
             ctx.fillStyle = darkTheme ? COLOR_TILE_DARK : COLOR_TILE_LIGHT;
@@ -392,31 +430,36 @@ window.onload = () => {
     // set grid dimensions
     dim = window.localStorage.getItem('dim');
     if (dim === null) {
-        window.localStorage.setItem('dim', '11');
         dim = '11';
+        window.localStorage.setItem('dim', dim);
     }
-    setGridDim(parseInt(dim));
+    setGridDim(parseInt(dim), true);
 
     // set speed
     let speed = window.localStorage.getItem('diff');
     if (speed === null) {
-        window.localStorage.setItem('diff', '1');
         speed = '1';
+        window.localStorage.setItem('diff', speed);
     }
-    setDifficulty(parseInt(speed));
+    setDifficulty(parseInt(speed), true);
 
     // set theme
     theme = window.localStorage.getItem('darkTheme');
     if (darkTheme === null) {
-        window.localStorage.setItem('darkTheme', 'true');
         theme = 'true';
+        window.localStorage.setItem('darkTheme', theme);
     }
     setDarkTheme(theme === 'true');
 
-    // load score
-    let hScore = window.localStorage.getItem('hScore');
-    if (hScore !== null)
-        document.getElementById('hScore').innerHTML = ('00000' + (hScore)).slice(-6);
+    // load highscores
+    let table = window.localStorage.getItem('hScoreTable');
+    if (table === null) {
+        table = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+        window.localStorage.setItem('hScoreTable', JSON.stringify(table));
+    }
+    else
+        table = JSON.parse(table);
+    loadHScore(table);
 
     // initialize
     init();
