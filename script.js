@@ -1,63 +1,68 @@
-// === consts ===
+// ===== consts =====
 // colors
-const tileColorD = '#303030';
-const tileColorL = '#F0F0F0';
-const snakeColor = '#00FFB2';
-const headColor = '#4d8a77';
-const orbColor = '#ED3459';
+const COLOR_TILE_DARK = '#303030';
+const COLOR_TILE_LIGHT = '#F0F0F0';
+const COLOR_LIGHT_GREEN = '#00FFB2';
+const COLOR_DARK_GREEN = '#4D8A77';
+const COLOR_LIGHT_RED = '#ED3459';
+const COLOR_DARK_RED = '#BD2040';
+const COLOR_POS_CIRCLE = '#F0F0F0';
 
 // dimensions
-const paddingL = 2.5;
-const gridDim = 11;
-const gapSize = 5;
-const sqrDim = 35;
+const GRID_DIM = 11;
+
+// canvas dimensions
+const PADDING_LEFT = 2.5;
+const PADDING_TOP_GRID = 30;
+
+const CIRCLE_RADIUS = 5;
+const CIRCLE_X = [190, 210, 230, 250];
+
+const SQR_DIM = 35;
+const GAP_SIZE = 5;
 
 // tile code
-const EMPTY = -1;
+const EMPTY = 0;
 const SNAKE = 1;
 const HEAD = 2;
 const ORB = 3;
 
-// === vars ===
+// ===== vars =====
 // theme
 let darkTheme
 
 // game state
 let orb;
-
 let snake;
-let snakeDir;
+let snakeDir = 0;
 let prevDir;
-
 let state;
-
 let score;
-
 let pause = true;
 
 // doc vars
 let canvas;
 let ctx;
 
-// === functions ===
+// ===== functions =====
 const init = () => {
-    snakeDir = 'u';
-    prevDir = 'u';
+    snakeDir = 0;
+    prevDir = 0;
 
     score = 0;
 
     state = [
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ];
 
     snake = [[5, 7], [5, 6]];
@@ -65,18 +70,17 @@ const init = () => {
 
 const spawnOrb = () => {
     let emptyList = [];
-
     state.forEach((row, rIndex) => {
         row.forEach((col, cIndex) => {
             if (col === EMPTY)
                 emptyList.push([rIndex, cIndex]);
         });
     });
-
     if (emptyList.length === 0)
         return false;
 
     orb = emptyList[Math.floor(Math.random() * emptyList.length)];
+
     return true;
 }
 
@@ -84,8 +88,8 @@ const nextFrame = () => {
     // new head
     let newHead = [...snake[snake.length - 1]];
 
-    let rowDelta = (snakeDir === 'l') * -1 + (snakeDir === 'r') * 1;
-    let colDelta = (snakeDir === 'u') * -1 + (snakeDir === 'd') * 1;
+    let rowDelta = (snakeDir === 2) * -1 + (snakeDir === 3) * 1;
+    let colDelta = (snakeDir === 0) * -1 + (snakeDir === 1) * 1;
 
     newHead[0] += rowDelta;
     newHead[1] += colDelta;
@@ -109,14 +113,18 @@ const nextFrame = () => {
     markSnake();
 
     // collides with orb
+    newOrb = false
     if (newHead[0] === orb[0] && newHead[1] === orb[1]) {
         score += 50;
         document.getElementById('score').innerHTML = ('00000' + (score)).slice(-6);
+        // unable to spawn orb, beate the game
         if (!spawnOrb()) {
             pause = true;
             return false;
         }
+        // new orb
         else
+            newOrb = true
             state[orb[0]][orb[1]] = ORB;
     }
     else {
@@ -124,7 +132,7 @@ const nextFrame = () => {
         snake.splice(0, 1);
     }
 
-    drawGrid();
+    updateCanvas(newOrb);
 
     // update directions
     prevDir = snakeDir;
@@ -153,26 +161,63 @@ const start = () => {
 
 const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);
 
-const drawGrid = () => {
+const drawCircle = (x, y, radius, ctx, color) => {
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, Math.PI * 2, true)
+    ctx.fill()
+}
+
+const updateCanvas = (newOrb) => {
+    // clear
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let row = 0; row < gridDim; ++row) {
-        for (let col = 0; col < gridDim; ++col) {
-            ctx.fillStyle = darkTheme ? tileColorD : tileColorL;
+
+    // draw pos circle
+    drawCircle(
+        CIRCLE_RADIUS * 2,
+        CIRCLE_RADIUS * 2,
+        CIRCLE_RADIUS,
+        ctx,
+        COLOR_POS_CIRCLE,
+    );
+
+    // draw direction circles
+    CIRCLE_X.forEach((x, index) => drawCircle(
+        x,
+        CIRCLE_RADIUS * 2,
+        CIRCLE_RADIUS,
+        ctx,
+        snakeDir === index ? COLOR_LIGHT_GREEN : COLOR_DARK_GREEN
+    ));
+
+    // draw orb circle
+    drawCircle(
+        canvas.width - CIRCLE_RADIUS * 2,
+        CIRCLE_RADIUS * 2,
+        CIRCLE_RADIUS,
+        ctx,
+        newOrb ? COLOR_LIGHT_RED : COLOR_DARK_RED,
+    );
+
+    // draw grid
+    for (let row = 0; row < GRID_DIM; ++row) {
+        for (let col = 0; col < GRID_DIM; ++col) {
+            ctx.fillStyle = darkTheme ? COLOR_TILE_DARK : COLOR_TILE_LIGHT;
 
             if (state[row][col] === HEAD)
-                ctx.fillStyle = headColor;
+                ctx.fillStyle = COLOR_DARK_GREEN;
 
             if (state[row][col] === SNAKE)
-                ctx.fillStyle = snakeColor;
+                ctx.fillStyle = COLOR_LIGHT_GREEN;
 
             if (state[row][col] === ORB)
-                ctx.fillStyle = orbColor;
+                ctx.fillStyle = COLOR_LIGHT_RED;
 
             ctx.fillRect(
-                row * (sqrDim + gapSize) + paddingL,
-                col * (sqrDim + gapSize) + paddingL,
-                sqrDim,
-                sqrDim
+                row * (SQR_DIM + GAP_SIZE) + PADDING_LEFT,
+                col * (SQR_DIM + GAP_SIZE) + PADDING_TOP_GRID,
+                SQR_DIM,
+                SQR_DIM
             );
         }
     }
@@ -190,7 +235,7 @@ const toggleDarkTheme = () => {
 
     document.getElementById('switch').checked = darkTheme;
 
-    drawGrid();
+    updateCanvas(false);
 }
 
 document.addEventListener('keydown', event => {
@@ -215,34 +260,33 @@ document.addEventListener('keydown', event => {
         switch (event.key) {
             case 'ArrowUp':
             case 'w':
-                if (prevDir === 'd')
+                if (prevDir === 1)
                     return;
-                return snakeDir = 'u';
+                return snakeDir = 0;
 
             case 'ArrowDown':
             case 's':
-                if (prevDir === 'u')
+                if (prevDir === 0)
                     return;
-                return snakeDir = 'd';
+                return snakeDir = 1;
 
             case 'ArrowLeft':
             case 'a':
-                if (prevDir === 'r')
+                if (prevDir === 3)
                     return;
-                return snakeDir = 'l';
+                return snakeDir = 2;
 
             case 'ArrowRight':
             case 'd':
-                if (prevDir === 'l')
+                if (prevDir === 2)
                     return;
-                return snakeDir = 'r';
+                return snakeDir = 3;
 
             default:
                 return;
         }
     }
 });
-
 
 window.onload = () => {
     // get doc vars
@@ -281,5 +325,5 @@ window.onload = () => {
         document.getElementById('hScore').innerHTML = ('00000' + (hScore)).slice(-6);
 
     // update
-    drawGrid();
+    updateCanvas(false);
 }
