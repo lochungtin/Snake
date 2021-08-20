@@ -8,8 +8,6 @@ const COLOR_LIGHT_RED = '#ED3459';
 const COLOR_DARK_RED = '#BD2040';
 const COLOR_POS_CIRCLE = '#F0F0F0';
 
-// dimensions
-const GRID_DIM = 11;
 
 // canvas dimensions
 const PADDING_LEFT = 2.5;
@@ -38,14 +36,15 @@ let menuOpen = false;
 // game state
 let orb;
 let snake;
-let snakeDir = 0;
+let snakeDir;
 let prevDir;
 let state;
 let score;
 let pause = true;
 
 // game setting
-let speedSelection = 1;
+let speedSelection;
+let gridDim;
 
 // doc vars
 let canvas;
@@ -88,20 +87,44 @@ const toggleDarkTheme = () => {
 }
 
 // set difficulty
-const selectDifficulty = index => {
-    let elems = [
+const setDifficulty = index => {
+    // update global var
+    speedSelection = index;
+
+    // update buttons
+    [
         document.getElementById('easyDiffBtn'),
         document.getElementById('normDiffBtn'),
         document.getElementById('hardDiffBtn'),
         document.getElementById('aiDiffBtn'),
-    ];
-
-    // update buttons
-    speedSelection = index;
-    elems.forEach((elem, index )=> elem.src = index === speedSelection ? './img/checked_true.svg' : './img/checked_false.svg');
+    ]
+        .forEach((elem, index )=> elem.src = index === speedSelection ? './img/checked_true.svg' : './img/checked_false.svg');
 
     // save diff selection
     window.localStorage.setItem('diff', index.toString());
+}
+
+// set grid dim
+const setGridDim = dim => {
+    // update global var
+    gridDim = dim;
+
+    // update buttons 
+    console.log(dim)
+    console.log(2 - (dim - 7) / 2);
+    [
+        document.getElementById('x11Btn'),
+        document.getElementById('x9Btn'),
+        document.getElementById('x7Btn'),
+    ]
+        .forEach((elem, index )=> elem.src = index === 2 - (dim - 7) / 2 ? './img/checked_true.svg' : './img/checked_false.svg');
+
+    // redraw canvas
+    init();
+    updateCanvas(false);
+
+    // save grid dim
+    window.localStorage.setItem('dim', dim.toString());
 }
 
 // game functions & script
@@ -110,27 +133,27 @@ const init = () => {
     prevDir = 0;
 
     score = 0;
+    document.getElementById('score').innerHTML = '000000';
 
-    state = [
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-    ];
+    state = [];
+    for (let i = 0; i < gridDim; ++i) {
+        let row = new Array(gridDim);
+        row.fill(EMPTY);
+
+        state.push(row);
+    }
 
     snake = [
         [
-            Math.floor(GRID_DIM / 2),
-            Math.floor(GRID_DIM / 2),
+            Math.floor(gridDim / 2),
+            Math.floor(gridDim / 2),
         ],
     ];
+
+    markSnake();
+
+    spawnOrb();
+    state[orb[0]][orb[1]] = ORB;
 }
 
 const spawnOrb = () => {
@@ -163,9 +186,9 @@ const nextFrame = () => {
     if (
         // out of bounds
         newHead[0] < 0 ||
-        newHead[0] > GRID_DIM - 1 ||
+        newHead[0] > gridDim - 1 ||
         newHead[1] < 0 ||
-        newHead[1] > GRID_DIM - 1 ||
+        newHead[1] > gridDim - 1 ||
         // own body collision
         snake.findIndex(coords => coords[0] === newHead[0] && coords[1] === newHead[1]) !== -1
     ) {
@@ -265,8 +288,8 @@ const updateCanvas = newOrb => {
     );
 
     // draw grid
-    for (let row = 0; row < GRID_DIM; ++row) {
-        for (let col = 0; col < GRID_DIM; ++col) {
+    for (let row = 0; row < gridDim; ++row) {
+        for (let col = 0; col < gridDim; ++col) {
             ctx.fillStyle = darkTheme ? COLOR_TILE_DARK : COLOR_TILE_LIGHT;
 
             if (state[row][col] === HEAD)
@@ -299,13 +322,8 @@ document.addEventListener('keydown', event => {
     // space bar
     if (event.key === ' ') {
         if (document.getElementById('state').innerHTML === 'GAMEOVER') {
-            document.getElementById('score').innerHTML = '000000';
-
             init();
-            markSnake();
-
-            spawnOrb();
-            state[orb[0]][orb[1]] = ORB;
+            updateCanvas(false);
         }
 
         document.getElementById('state').innerHTML = pause ? 'PLAYING' : 'PAUSED';
@@ -351,12 +369,13 @@ window.onload = () => {
     canvas = document.getElementById('main');
     ctx = canvas.getContext('2d');
 
-    // intialize objects
-    init();
-    markSnake();
-
-    spawnOrb();
-    state[orb[0]][orb[1]] = ORB;
+    // set grid dimensions
+    dim = window.localStorage.getItem('dim');
+    if (dim === null) {
+        window.localStorage.setItem('dim', '11');
+        dim = '11';
+    }
+    setGridDim(parseInt(dim));   
 
     // set theme
     darkTheme = window.localStorage.getItem('darkTheme');
@@ -396,8 +415,7 @@ window.onload = () => {
         window.localStorage.setItem('diff', '1');
         speed = '1';
     }
-    
-    selectDifficulty(parseInt(speed));
+    setDifficulty(parseInt(speed));
 
     // load score
     let hScore = window.localStorage.getItem('hScore');
@@ -405,5 +423,6 @@ window.onload = () => {
         document.getElementById('hScore').innerHTML = ('00000' + (hScore)).slice(-6);
 
     // update
+    init();
     updateCanvas(false);
 }
