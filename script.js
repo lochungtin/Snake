@@ -40,6 +40,19 @@ let state;
 let score;
 let pause = true;
 
+// game setting
+let easy = 500;
+let normal = 300;
+let hard = 100;
+let ai = 25;
+let difficulty = {
+    easy,
+    normal,
+    hard,
+    ai,
+}
+let speedSelection = Object.keys(difficulty)[2];
+
 // doc vars
 let canvas;
 let ctx;
@@ -197,7 +210,7 @@ const start = () => {
                 }
             }
         }
-    }, 300);
+    }, difficulty[speedSelection]);
 }
 
 const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);

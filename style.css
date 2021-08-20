@@ -20,14 +20,16 @@ p {
   -ms-user-select: none;
 }
 
-.dark-mode-text {
-	color: #FFFFFF;
-}
-
 html,
 body {
   height: 100%;
   width: 100%;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
 
 main {
@@ -37,6 +39,10 @@ main {
   flex-direction: column;
   height: 100%;
   justify-content: center;
+}
+
+.dark-mode-text {
+	color: #FFFFFF;
 }
 
 .menu-btn {
@@ -77,39 +83,24 @@ main {
 	background-color: #1E1E1E;
 }
 
-.score-row {
-  align-items: flex-start;
+.difficulty-selection-container {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.difficulty-mode-container {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  margin-bottom: 10px;
-  justify-content: space-between;
-  width: 440px;
-}
-
-.score-cell {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
   height: 50px;
   justify-content: space-between;
-}
-
-.state-cell {
-  align-items: center;
-  display: flex;
-  height: 50px;
-  justify-content: center;
-}
-
-.prompt {
-  margin-top: 10px;
+  width: 300px;
 }
 
 .theme-row {
 	align-items: center;
 	display: flex;
 	flex-direction: row;
-	margin-top: 20px;
 	justify-content: space-between;
 	width: 200px;
 }
@@ -172,4 +163,32 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.score-row {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  width: 440px;
+}
+
+.score-cell {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  justify-content: space-between;
+}
+
+.state-cell {
+  align-items: center;
+  display: flex;
+  height: 50px;
+  justify-content: center;
+}
+
+.prompt {
+  margin-top: 10px;
 }
