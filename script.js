@@ -6,7 +6,7 @@ const COLOR_LIGHT_GREEN = '#00FFB2';
 const COLOR_DARK_GREEN = '#4D8A77';
 const COLOR_LIGHT_RED = '#ED3459';
 const COLOR_DARK_RED = '#BD2040';
-const COLOR_POS_CIRCLE = '#F0F0F0';
+const COLOR_POS_CIRCLE = '#FFFFFF';
 
 // canvas dimensions
 const PADDING_LEFT = 2.5;
