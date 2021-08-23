@@ -454,26 +454,20 @@ window.onload = () => {
 
     // set grid dimensions
     dim = window.localStorage.getItem('dim');
-    if (dim === null) {
+    if (dim === null)
         dim = '11';
-        window.localStorage.setItem('dim', dim);
-    }
     setGridDim(parseInt(dim), true);
 
     // set speed
     let speed = window.localStorage.getItem('diff');
-    if (speed === null) {
+    if (speed === null)
         speed = '1';
-        window.localStorage.setItem('diff', speed);
-    }
     setDifficulty(parseInt(speed), true);
 
     // set theme
     theme = window.localStorage.getItem('darkTheme');
-    if (darkTheme === null) {
+    if (theme === null)
         theme = 'true';
-        window.localStorage.setItem('darkTheme', theme);
-    }
     setDarkTheme(theme === 'true');
 
     // load highscores
