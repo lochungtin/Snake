@@ -15,6 +15,8 @@ const PADDING_TOP = 30;
 const CIRCLE_RADIUS = 5;
 const CIRCLE_X = [190, 210, 230, 250];
 
+const CIRCLE_GAMEOVER_POS = [];
+
 const SQR_DIM = 35;
 const GAP_SIZE = 5;
 
@@ -146,7 +148,7 @@ const setDarkTheme = on => {
     document.getElementById('switch').checked = darkTheme;
 
     // redraw canvas
-    updateCanvas(false);
+    updateCanvas(false, false);
 
     // save theme selection
     window.localStorage.setItem('darkTheme', darkTheme.toString());
@@ -221,7 +223,7 @@ const init = () => {
     state[orb[0]][orb[1]] = ORB;
 
     // redraw canvas
-    updateCanvas(false);
+    updateCanvas(false, false);
 }
 
 const markSnake = () => snake.forEach((coords, index) => state[coords[0]][coords[1]] = index == snake.length - 1 ? HEAD : SNAKE);
@@ -250,6 +252,8 @@ const start = () => {
             else {
                 clearTimeout(id);
                 document.getElementById('state').innerHTML = 'GAMEOVER';
+
+                updateCanvas(false, true);
 
                 // set highscore
                 if (hScore < score)
@@ -307,7 +311,7 @@ const nextFrame = () => {
         snake.splice(0, 1);
     }
 
-    updateCanvas(newOrb);
+    updateCanvas(newOrb, false);
 
     // update directions
     prevDir = snakeDir;
@@ -315,7 +319,7 @@ const nextFrame = () => {
 }
 
 // update canvas
-const updateCanvas = newOrb => {
+const updateCanvas = (newOrb, gameover) => {
     // clear
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -336,6 +340,16 @@ const updateCanvas = newOrb => {
         ctx,
         snakeDir === index ? COLOR_LIGHT_GREEN : COLOR_DARK_GREEN
     ));
+
+    // draw gameover circle
+    if (gameover)
+        drawCircle(
+            canvas.width - CIRCLE_RADIUS * 2 - 20,
+            CIRCLE_RADIUS * 2,
+            CIRCLE_RADIUS,
+            ctx,
+            COLOR_LIGHT_GREEN,
+        );
 
     // draw orb circle
     drawCircle(
