@@ -27,7 +27,7 @@ const HEAD = 2;
 const ORB = 3;
 
 // game settings
-let SPEEDS = [500, 300, 100, 50];
+let SPEEDS = [500, 300, 120, 75];
 
 // score settings
 let BASE_SCORE = 50;
