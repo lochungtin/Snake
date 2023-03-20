@@ -437,6 +437,7 @@ window.onload = () => {
 			[0, 0, 0],
 			[0, 0, 0],
 			[0, 0, 0],
+			[0, 0, 0],
 		];
 		window.localStorage.setItem('hScoreTable', JSON.stringify(table));
 	} else table = JSON.parse(table);
