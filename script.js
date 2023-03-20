@@ -431,22 +431,22 @@ window.onload = () => {
 	ctx = canvas.getContext('2d');
 
 	// set grid dimensions
-	dim = window.localStorage.getItem('dim');
+	dim = window.localStorage.getItem('snake:dim');
 	if (dim === null) dim = '11';
 	setGridDim(parseInt(dim), true);
 
 	// set speed
-	let speed = window.localStorage.getItem('diff');
+	let speed = window.localStorage.getItem('snake:diff');
 	if (speed === null) speed = '1';
 	setDifficulty(parseInt(speed), true);
 
 	// set theme
-	theme = window.localStorage.getItem('darkTheme');
+	theme = window.localStorage.getItem('snake:darkTheme');
 	if (theme === null) theme = 'true';
 	setDarkTheme(theme === 'true');
 
 	// load highscores
-	let table = window.localStorage.getItem('hScoreTable');
+	let table = window.localStorage.getItem('snake:hScoreTable');
 	if (table === null) {
 		table = [
 			[0, 0, 0],
