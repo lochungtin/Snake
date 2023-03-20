@@ -173,7 +173,7 @@ const setHScore = (score) => {
 	document.getElementById('hScore').innerHTML = ('00000' + hScore).slice(-6);
 
 	// save hscore to table
-	window.localStorage.setItem('hScoreTable', JSON.stringify(hScoreTable));
+	window.localStorage.setItem('snake:hScoreTable', JSON.stringify(hScoreTable));
 
 	// find all time high in all modes
 	max = 0;
