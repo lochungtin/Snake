@@ -27,7 +27,7 @@ const HEAD = 2;
 const ORB = 3;
 
 // game settings
-let SPEEDS = [500, 300, 120, 75, 30];
+let SPEEDS = [500, 300, 120, 75, 35];
 
 // score settings
 let BASE_SCORE = 50;
@@ -185,6 +185,22 @@ const setHScore = (score) => {
 
 	// save highest score
 	window.localStorage.setItem('hScore', max.toString());
+};
+
+const resetScore = () => {
+	document.getElementById('score').innerHTML = '000000';
+	document.getElementById('hScore').innerHTML = '000000';
+	window.localStorage.setItem('hScore', 0);
+	window.localStorage.setItem(
+		'hScoreTable',
+		JSON.stringify([
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+		]),
+	);
 };
 
 // === game functions ===
