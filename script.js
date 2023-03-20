@@ -100,10 +100,9 @@ const setDifficulty = (index, bypass) => {
 		document.getElementById('hardDiffBtn'),
 		document.getElementById('insnDiffBtn'),
 		document.getElementById('ntmrDiffBtn'),
-	].forEach(
-		(elem, index) =>
-			(elem.src = index === speedSelection ? './icons/checked_true.svg' : './icons/checked_false.svg'),
-	);
+	].forEach((elem, index) => {
+		elem.src = index === speedSelection ? './icons/checked_true.svg' : './icons/checked_false.svg';
+	});
 
 	// save diff selection
 	window.localStorage.setItem('diff', speedSelection.toString());
