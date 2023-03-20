@@ -81,7 +81,7 @@ const setGridDim = (dim, bypass) => {
 	init();
 
 	// save grid dim
-	window.localStorage.setItem('dim', gridDim.toString());
+	window.localStorage.setItem('snake:dim', gridDim.toString());
 
 	// highscore bypass
 	if (bypass) return;
@@ -105,7 +105,7 @@ const setDifficulty = (index, bypass) => {
 	});
 
 	// save diff selection
-	window.localStorage.setItem('diff', speedSelection.toString());
+	window.localStorage.setItem('snake:diff', speedSelection.toString());
 
 	// highscore bypass
 	if (bypass) return;
@@ -147,7 +147,7 @@ const setDarkTheme = (on) => {
 	updateCanvas(false, false);
 
 	// save theme selection
-	window.localStorage.setItem('darkTheme', darkTheme.toString());
+	window.localStorage.setItem('snake:darkTheme', darkTheme.toString());
 };
 
 const toggleDarkTheme = () => setDarkTheme(!darkTheme);
@@ -184,15 +184,15 @@ const setHScore = (score) => {
 	);
 
 	// save highest score
-	window.localStorage.setItem('hScore', max.toString());
+	window.localStorage.setItem('snake:hScore', max.toString());
 };
 
 const resetScore = () => {
 	document.getElementById('score').innerHTML = '000000';
 	document.getElementById('hScore').innerHTML = '000000';
-	window.localStorage.setItem('hScore', 0);
+	window.localStorage.setItem('snake:hScore', 0);
 	window.localStorage.setItem(
-		'hScoreTable',
+		'snake:hScoreTable',
 		JSON.stringify([
 			[0, 0, 0],
 			[0, 0, 0],
@@ -455,7 +455,7 @@ window.onload = () => {
 			[0, 0, 0],
 			[0, 0, 0],
 		];
-		window.localStorage.setItem('hScoreTable', JSON.stringify(table));
+		window.localStorage.setItem('snake:hScoreTable', JSON.stringify(table));
 	} else table = JSON.parse(table);
 	loadHScore(table);
 
